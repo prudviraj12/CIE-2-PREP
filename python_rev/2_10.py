@@ -50,3 +50,49 @@
 #         if i+j>=10:
 #             res.append(i+j)
 # print(res)
+# l = [(1, 2), (2, 3), (3, 6), (3, 2), (2, 1), (8, 9)]
+
+# res = []
+
+# for i in l:
+#     if (i[1], i[0]) in l and (i[1], i[0]) not in res:
+#         res.append(i)
+
+# print(res)
+# if(i[1],i[0]) in l and (i[1],i[0]) not in res:
+#     res.append(i)
+# def generate_binary(n, s=""):
+#     if len(s) == n:
+#         print(s)
+#         return
+    
+#     generate_binary(n, s + "0")
+#     generate_binary(n, s + "1")
+
+# n = int(input("Enter n: "))
+# generate_binary(n)
+# def matrix():
+#     m = []
+
+#     for i in range(3):
+#         row = []
+#         for j in range(3):
+#             val = int(input())
+#             row.append(val)
+#         m.append(row)
+
+#     return m
+
+
+# print(matrix())
+# def generate(n, s=""):
+#     if len(s) == n:
+#         print(s)
+#         return
+
+#     generate(n, s + "0")
+#     generate(n, s + "1")
+
+
+# n = int(input())
+# generate(n)
