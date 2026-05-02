@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aldrich University — Shaping Tomorrow's Leaders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── CSS Reset & Variables ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #0b1e3d;
+      --navy-mid:  #132a52;
+      --blue:      #1a4fa0;
+      --sky:       #2d7dd2;
+      --gold:      #c8963e;
+      --gold-lt:   #e8b96a;
+      --cream:     #f9f6f0;
+      --white:     #ffffff;
+      --gray-lt:   #f2f4f8;
+      --gray:      #8a93a6;
+      --text:      #1e2840;
+      --text-lt:   #4a5568;
+
+      --ff-serif: 'Playfair Display', Georgia, serif;
+      --ff-sans:  'DM Sans', 'Segoe UI', sans-serif;
+
+      --radius-sm: 6px;
+      --radius:    12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 2px 8px rgba(11,30,61,.08);
+      --shadow:    0 6px 24px rgba(11,30,61,.12);
+      --shadow-lg: 0 16px 48px rgba(11,30,61,.18);
+
+      --transition: .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--ff-sans);
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ─── Utility ───────────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin-inline: auto; padding-inline: clamp(20px, 5vw, 60px); }
+    .section-label {
+      font-family: var(--ff-sans);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.9rem, 3.5vw, 2.9rem);
+      color: var(--navy);
+      line-height: 1.2;
+      margin-top: .45rem;
+    }
+    .section-title em { font-style: italic; color: var(--sky); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.65rem;
+      border-radius: 50px;
+      font-family: var(--ff-sans);
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(200,150,62,.35); }
+    .btn-outline {
+      background: transparent;
+      border-color: rgba(255,255,255,.5);
+      color: var(--white);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.12); border-color: var(--white); }
+    .btn-navy {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .btn-navy:hover { background: var(--navy-mid); transform: translateY(-2px); box-shadow: var(--shadow); }
+
+    /* ─── Sticky Nav ────────────────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,30,61,.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+    .nav-logo-emblem {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      background: var(--gold);
+      display: grid;
+      place-items: center;
+      font-family: var(--ff-serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      line-height: 1.15;
+    }
+    .nav-logo-text strong {
+      display: block;
+      font-family: var(--ff-serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .01em;
+    }
+    .nav-logo-text span {
+      font-size: .68rem;
+      font-weight: 400;
+      color: var(--gray);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      display: block;
+      padding: .5rem .85rem;
+      font-size: .875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.08); }
+    .nav-links a.active { color: var(--gold); }
+    .nav-cta { margin-left: .75rem; }
+
+    /* ─── Hero ──────────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--navy);
+    }
+
+    /* Geometric background pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 65% 45%, rgba(45,125,210,.22) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 70%, rgba(200,150,62,.12) 0%, transparent 55%),
+        linear-gradient(135deg, #0b1e3d 0%, #0f2448 55%, #132a52 100%);
+    }
+
+    /* Diagonal grid lines */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      animation: fadeUp .9s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(200,150,62,.15);
+      border: 1px solid rgba(200,150,62,.3);
+      border-radius: 50px;
+      padding: .35rem 1rem;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--gold-lt);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    .hero-title {
+      font-family: var(--ff-serif);
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-lt);
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: clamp(.95rem, 1.5vw, 1.1rem);
+      color: rgba(255,255,255,.68);
+      max-width: 540px;
+      margin-bottom: 2.2rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .hero-stats {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.1);
+      animation: fadeUp .9s .3s ease both;
+    }
+    .hero-stat-num {
+      font-family: var(--ff-serif);
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--white);
+      display: block;
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: .8rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: .3rem;
+      display: block;
+    }
+
+    /* Floating card decoration */
+    .hero-deco {
+      position: absolute;
+      right: clamp(20px, 8vw, 120px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(220px, 28vw, 360px);
+      z-index: 2;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(-50%) translateY(0); }
+      50%       { transform: translateY(-50%) translateY(-14px); }
+    }
+    .hero-card {
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      color: var(--white);
+    }
+    .hero-card-img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--blue), var(--sky));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+    }
+    .hero-card-campus-img {
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(135deg, #1a4fa0 0%, #2d7dd2 40%, #0b3d7a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .campus-svg { width: 80%; opacity: .85; }
+    .hero-card h3 { font-family: var(--ff-serif); font-size: 1.1rem; margin-bottom: .35rem; }
+    .hero-card p  { font-size: .82rem; color: rgba(255,255,255,.6); }
+    .hero-card-tag {
+      display: inline-block;
+      background: rgba(200,150,62,.2);
+      color: var(--gold-lt);
+      border-radius: 4px;
+      padding: .2rem .6rem;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+
+    /* ─── Announcement Bar ──────────────────────────────────────────── */
+    .announce-bar {
+      background: var(--gray-lt);
+      border-bottom: 1px solid #e2e8f0;
+      padding: .75rem 0;
+      overflow: hidden;
+    }
+    .announce-inner {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      white-space: nowrap;
+      animation: ticker 30s linear infinite;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .announce-item {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--text-lt);
+      flex-shrink: 0;
+    }
+    .announce-dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── Programs Section ──────────────────────────────────────────── */
+    .programs { padding: clamp(60px, 9vw, 110px) 0; background: var(--cream); }
+    .programs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .program-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,.06);
+      transition: var(--transition);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .program-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .program-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .program-card:hover::before { transform: scaleX(1); }
+    .prog-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .prog-icon.blue   { background: rgba(26,79,160,.1);  }
+    .prog-icon.gold   { background: rgba(200,150,62,.12); }
+    .prog-icon.sky    { background: rgba(45,125,210,.1);  }
+    .prog-icon.green  { background: rgba(34,130,90,.1);   }
+    .prog-icon.purple { background: rgba(110,60,180,.1);  }
+    .prog-icon.red    { background: rgba(190,50,60,.1);   }
+    .program-card h3 {
+      font-family: var(--ff-serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: .5rem;
+    }
+    .program-card p { font-size: .875rem; color: var(--text-lt); margin-bottom: 1.2rem; }
+    .prog-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--gray);
+    }
+    .prog-meta span { display: flex; align-items: center; gap: .3rem; }
+
+    /* ─── Stats Strip ───────────────────────────────────────────────── */
+    .stats-strip {
+      background: var(--navy);
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats-strip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 100% at 50% 50%, rgba(45,125,210,.15), transparent);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .stat-item { padding: 1rem; }
+    .stat-num {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--white);
+      display: block;
+      line-height: 1;
+    }
+    .stat-accent { color: var(--gold); }
+    .stat-desc {
+      font-size: .82rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.5);
+      margin-top: .45rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,.1);
+      display: none;
+    }
+
+    /* ─── Campus Life ───────────────────────────────────────────────── */
+    .campus { padding: clamp(60px, 9vw, 110px) 0; }
+    .campus-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+    }
+    .campus-text .section-label  { margin-bottom: .5rem; }
+    .campus-text .section-title  { margin-bottom: 1rem; }
+    .campus-text p { color: var(--text-lt); margin-bottom: 1.5rem; max-width: 480px; }
+    .campus-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .campus-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      padding: 1rem;
+      background: var(--gray-lt);
+      border-radius: var(--radius);
+    }
+    .campus-feature-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: .1rem;
+    }
+    .campus-feature h4 { font-size: .9rem; font-weight: 600; color: var(--navy); }
+    .campus-feature p  { font-size: .8rem; color: var(--text-lt); margin: 0; }
+    .campus-visual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1rem;
+    }
+    .campus-img {
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+    }
+    .campus-img.tall { grid-row: span 2; }
+    .campus-img-fill {
+      width: 100%;
+      height: 100%;
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    .ci-1 { background: linear-gradient(135deg, #1a4fa0, #2d7dd2); min-height: 320px !important; }
+    .ci-2 { background: linear-gradient(135deg, #c8963e, #e8b96a); }
+    .ci-3 { background: linear-gradient(135deg, #22825a, #34c47e); }
+    .campus-img-label {
+      position: absolute;
+      bottom: .75rem; left: .75rem;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .3rem .7rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    /* ─── Testimonials ──────────────────────────────────────────────── */
+    .testimonials { padding: clamp(60px, 9vw, 110px) 0; background: var(--gray-lt); }
+    .testimonials-header { text-align: center; margin-bottom: 3rem; }
+    .testimonials-header .section-label { display: block; margin-bottom: .5rem; }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .testi-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,.05);
+      position: relative;
+      transition: var(--transition);
+    }
+    .testi-card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+    .testi-quote {
+      font-family: var(--ff-serif);
+      font-size: 3rem;
+      color: var(--gold);
+      line-height: .6;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .testi-text {
+      font-size: .92rem;
+      color: var(--text-lt);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--ff-serif);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .av-1 { background: linear-gradient(135deg, #1a4fa0, #2d7dd2); }
+    .av-2 { background: linear-gradient(135deg, #c8963e, #e8b96a); }
+    .av-3 { background: linear-gradient(135deg, #22825a, #34c47e); }
+    .testi-name { font-weight: 600; font-size: .9rem; color: var(--navy); display: block; }
+    .testi-role { font-size: .78rem; color: var(--gray); }
+    .stars { color: var(--gold); font-size: .85rem; margin-bottom: 1rem; letter-spacing: .05em; }
+
+    /* ─── News ──────────────────────────────────────────────────────── */
+    .news { padding: clamp(60px, 9vw, 110px) 0; }
+    .news-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+    .news-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,.06);
+      transition: var(--transition);
+    }
+    .news-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .news-img {
+      width: 100%;
+      aspect-ratio: 16/8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+    }
+    .ni-1 { background: linear-gradient(135deg, #0b1e3d, #1a4fa0); }
+    .ni-2 { background: linear-gradient(135deg, #2d7dd2, #5aa0e8); }
+    .news-body { padding: 1.6rem 1.8rem 2rem; }
+    .news-tag {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--sky);
+      margin-bottom: .6rem;
+    }
+    .news-card h3 {
+      font-family: var(--ff-serif);
+      font-size: 1.25rem;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: .6rem;
+    }
+    .news-card p { font-size: .875rem; color: var(--text-lt); }
+    .news-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.2rem;
+      font-size: .78rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+    .news-side { display: flex; flex-direction: column; gap: 1rem; }
+    .news-mini {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.4rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,.06);
+      display: flex;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+    .news-mini:hover { box-shadow: var(--shadow); }
+    .news-mini-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--gray-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .news-mini h4 { font-size: .875rem; font-weight: 600; color: var(--navy); margin-bottom: .25rem; line-height: 1.3; }
+    .news-mini span { font-size: .75rem; color: var(--gray); }
+
+    /* ─── CTA Banner ────────────────────────────────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, var(--sky) 100%);
+      padding: clamp(60px, 8vw, 100px) 0;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .cta-content { position: relative; }
+    .cta-banner .section-label { display: block; margin-bottom: .75rem; color: var(--gold-lt); }
+    .cta-banner h2 {
+      font-family: var(--ff-serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+    .cta-banner p { color: rgba(255,255,255,.65); max-width: 500px; margin-inline: auto; margin-bottom: 2.2rem; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── Footer ────────────────────────────────────────────────────── */
+    footer {
+      background: #080f1f;
+      color: rgba(255,255,255,.55);
+      padding: 4rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 2rem;
+    }
+    .footer-brand .nav-logo { margin-bottom: 1rem; }
+    .footer-brand p { font-size: .85rem; line-height: 1.8; max-width: 300px; }
+    .footer-social { display: flex; gap: .65rem; margin-top: 1.5rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      color: rgba(255,255,255,.6);
+    }
+    .social-btn:hover { background: var(--gold); color: var(--navy); }
+    .footer-col h4 {
+      font-family: var(--ff-sans);
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 1.1rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .footer-col a {
+      font-size: .85rem;
+      color: rgba(255,255,255,.5);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-bottom p { font-size: .8rem; }
+    .footer-bottom-links { display: flex; gap: 1.5rem; }
+    .footer-bottom-links a { font-size: .8rem; color: rgba(255,255,255,.4); text-decoration: none; }
+    .footer-bottom-links a:hover { color: rgba(255,255,255,.8); }
+
+    /* ─── Responsive ────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-deco { display: none; }
+      .hero-content { max-width: 100%; }
+      .campus-inner { grid-template-columns: 1fr; }
+      .campus-visual { order: -1; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .news-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .campus-features { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .programs-header { flex-direction: column; align-items: flex-start; }
+      .news-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 520px) {
+      .campus-visual { grid-template-columns: 1fr; }
+      .campus-img.tall { grid-row: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══════════════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="container nav-inner">
+
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-emblem">A</div>
+      <div class="nav-logo-text">
+        <strong>Aldrich University</strong>
+        <span>Est. 1872 · Cambridge</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#programs">Academics</a></li>
+      <li><a href="#campus">Campus</a></li>
+      <li><a href="#news">Research</a></li>
+      <li><a href="#">Admissions</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+
+    <a class="btn btn-primary nav-cta" href="#">Apply Now →</a>
+
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container" style="display:flex;flex-direction:column;gap:0;width:100%;position:relative;z-index:2;">
+
+    <div class="hero-content">
+      <div class="hero-badge">Now Accepting Applications · Class of 2029</div>
+
+      <h1 class="hero-title">
+        Where Curiosity <em>Becomes Legacy</em>
+      </h1>
+
+      <p class="hero-desc">
+        For over 150 years, Aldrich University has empowered brilliant minds
+        to challenge convention, pioneer discovery, and lead with purpose
+        on the global stage.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#" class="btn btn-primary">Explore Programs →</a>
+        <a href="#" class="btn btn-outline">Virtual Tour</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <span class="hero-stat-num">42,000+</span>
+        <span class="hero-stat-label">Students Enrolled</span>
+      </div>
+      <div>
+        <span class="hero-stat-num">180+</span>
+        <span class="hero-stat-label">Programs Offered</span>
+      </div>
+      <div>
+        <span class="hero-stat-num">#7</span>
+        <span class="hero-stat-label">Global Ranking</span>
+      </div>
+      <div>
+        <span class="hero-stat-num">98%</span>
+        <span class="hero-stat-label">Graduate Employment</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating decorative card (hidden on mobile) -->
+  <div class="hero-deco">
+    <div class="hero-card">
+      <div class="hero-card-tag">Featured Program</div>
+      <div class="hero-card-img">
+        <div class="hero-card-campus-img">
+          <!-- Inline campus SVG illustration -->
+          <svg class="campus-svg" viewBox="0 0 260 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Buildings -->
+            <rect x="10" y="60" width="40" height="70" rx="3" fill="rgba(255,255,255,.15)"/>
+            <rect x="20" y="40" width="20" height="20" rx="2" fill="rgba(255,255,255,.1)"/>
+            <rect x="25" y="20" width="10" height="22" rx="2" fill="rgba(200,150,62,.6)"/>
+            <!-- Main building -->
+            <rect x="80" y="35" width="100" height="95" rx="4" fill="rgba(255,255,255,.12)"/>
+            <rect x="105" y="15" width="50" height="22" rx="2" fill="rgba(255,255,255,.1)"/>
+            <rect x="126" y="0"  width="8"  height="17" fill="rgba(200,150,62,.7)"/>
+            <!-- Right wing -->
+            <rect x="205" y="55" width="45" height="75" rx="3" fill="rgba(255,255,255,.1)"/>
+            <!-- Windows -->
+            <rect x="93"  y="50" width="12" height="12" rx="2" fill="rgba(255,255,255,.3)"/>
+            <rect x="115" y="50" width="12" height="12" rx="2" fill="rgba(255,255,255,.3)"/>
+            <rect x="138" y="50" width="12" height="12" rx="2" fill="rgba(200,150,62,.5)"/>
+            <rect x="160" y="50" width="12" height="12" rx="2" fill="rgba(255,255,255,.3)"/>
+            <rect x="93"  y="72" width="12" height="12" rx="2" fill="rgba(255,255,255,.2)"/>
+            <rect x="115" y="72" width="12" height="12" rx="2" fill="rgba(200,150,62,.4)"/>
+            <rect x="138" y="72" width="12" height="12" rx="2" fill="rgba(255,255,255,.3)"/>
+            <rect x="160" y="72" width="12" height="12" rx="2" fill="rgba(255,255,255,.2)"/>
+            <!-- Ground -->
+            <rect x="0" y="128" width="260" height="12" rx="2" fill="rgba(255,255,255,.08)"/>
+            <!-- Trees -->
+            <ellipse cx="55"  cy="100" rx="10" ry="13" fill="rgba(52,196,126,.5)"/>
+            <ellipse cx="215" cy="95"  rx="9"  ry="11" fill="rgba(52,196,126,.45)"/>
+          </svg>
+        </div>
+      </div>
+      <h3>Computer Science & AI</h3>
+      <p>Ranked #3 globally · 4-year program</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ANNOUNCEMENT TICKER ═══════════════════════════════════════════ -->
+<div class="announce-bar">
+  <div class="container" style="overflow:hidden;">
+    <div class="announce-inner">
+      <span class="announce-item"><span class="announce-dot"></span>Fall 2025 applications open — Deadline: March 1st</span>
+      <span class="announce-item"><span class="announce-dot"></span>Aldrich ranked #7 worldwide by QS Rankings 2025</span>
+      <span class="announce-item"><span class="announce-dot"></span>New School of AI &amp; Data Science launching Spring 2026</span>
+      <span class="announce-item"><span class="announce-dot"></span>Research grant of $85M awarded to Climate Science Lab</span>
+      <span class="announce-item"><span class="announce-dot"></span>Summer exchange programs available in 60+ countries</span>
+      <!-- duplicate for seamless scroll -->
+      <span class="announce-item"><span class="announce-dot"></span>Fall 2025 applications open — Deadline: March 1st</span>
+      <span class="announce-item"><span class="announce-dot"></span>Aldrich ranked #7 worldwide by QS Rankings 2025</span>
+      <span class="announce-item"><span class="announce-dot"></span>New School of AI &amp; Data Science launching Spring 2026</span>
+      <span class="announce-item"><span class="announce-dot"></span>Research grant of $85M awarded to Climate Science Lab</span>
+      <span class="announce-item"><span class="announce-dot"></span>Summer exchange programs available in 60+ countries</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROGRAMS ══════════════════════════════════════════════════════ -->
+<section class="programs" id="programs">
+  <div class="container">
+    <div class="programs-header">
+      <div>
+        <p class="section-label">Academic Excellence</p>
+        <h2 class="section-title">Find Your <em>Field of Mastery</em></h2>
+      </div>
+      <a href="#" class="btn btn-navy">View All Programs →</a>
+    </div>
+
+    <div class="programs-grid">
+
+      <div class="program-card">
+        <div class="prog-icon blue">🖥️</div>
+        <h3>Computer Science &amp; AI</h3>
+        <p>Explore machine learning, software systems, and emerging AI technologies with world-class faculty.</p>
+        <div class="prog-meta">
+          <span>📚 4 years</span>
+          <span>👥 320 seats</span>
+        </div>
+      </div>
+
+      <div class="program-card">
+        <div class="prog-icon gold">⚖️</div>
+        <h3>Law &amp; International Policy</h3>
+        <p>Build expertise in constitutional law, human rights, and global governance at a top-ranked program.</p>
+        <div class="prog-meta">
+          <span>📚 3 years</span>
+          <span>👥 180 seats</span>
+        </div>
+      </div>
+
+      <div class="program-card">
+        <div class="prog-icon sky">🧬</div>
+        <h3>Biomedical Sciences</h3>
+        <p>From cell biology to clinical research, our biomedical track prepares you for breakthroughs.</p>
+        <div class="prog-meta">
+          <span>📚 4 years</span>
+          <span>👥 240 seats</span>
+        </div>
+      </div>
+
+      <div class="program-card">
+        <div class="prog-icon green">📊</div>
+        <h3>Business &amp; Economics</h3>
+        <p>Rigorous grounding in finance, strategy, and entrepreneurship with real-world case studies.</p>
+        <div class="prog-meta">
+          <span>📚 3 years</span>
+          <span>👥 400 seats</span>
+        </div>
+      </div>
+
+      <div class="program-card">
+        <div class="prog-icon purple">🎨</div>
+        <h3>Architecture &amp; Design</h3>
+        <p>Merge creativity with structural thinking at our award-winning design school.</p>
+        <div class="prog-meta">
+          <span>📚 5 years</span>
+          <span>👥 120 seats</span>
+        </div>
+      </div>
+
+      <div class="program-card">
+        <div class="prog-icon red">🔭</div>
+        <h3>Physics &amp; Astrophysics</h3>
+        <p>Tackle the universe's deepest questions at facilities equipped with cutting-edge instruments.</p>
+        <div class="prog-meta">
+          <span>📚 4 years</span>
+          <span>👥 160 seats</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS STRIP ════════════════════════════════════════════════════ -->
+<div class="stats-strip">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-num">150<span class="stat-accent">+</span></span>
+        <p class="stat-desc">Years of Excellence</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">32<span class="stat-accent">K</span></span>
+        <p class="stat-desc">Alumni Worldwide</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">94<span class="stat-accent">%</span></span>
+        <p class="stat-desc">Scholarship Rate</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">850<span class="stat-accent">+</span></span>
+        <p class="stat-desc">Research Papers / Year</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">60<span class="stat-accent">+</span></span>
+        <p class="stat-desc">Global Partners</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CAMPUS LIFE ════════════════════════════════════════════════════ -->
+<section class="campus" id="campus">
+  <div class="container campus-inner">
+
+    <div class="campus-text">
+      <p class="section-label">Life at Aldrich</p>
+      <h2 class="section-title">A Campus That <em>Inspires</em></h2>
+      <p>
+        Nestled across 300 breathtaking acres, Aldrich offers a vibrant community
+        where academic rigour meets rich cultural life. From state-of-the-art labs
+        to storied libraries, every corner sparks innovation.
+      </p>
+
+      <div class="campus-features">
+        <div class="campus-feature">
+          <span class="campus-feature-icon">🏛️</span>
+          <div>
+            <h4>Historic Architecture</h4>
+            <p>Award-winning Gothic and modern blend</p>
+          </div>
+        </div>
+        <div class="campus-feature">
+          <span class="campus-feature-icon">🔬</span>
+          <div>
+            <h4>Research Labs</h4>
+            <p>$2.4B in world-class facilities</p>
+          </div>
+        </div>
+        <div class="campus-feature">
+          <span class="campus-feature-icon">🏀</span>
+          <div>
+            <h4>Sports &amp; Wellness</h4>
+            <p>35+ varsity teams &amp; fitness centres</p>
+          </div>
+        </div>
+        <div class="campus-feature">
+          <span class="campus-feature-icon">🌍</span>
+          <div>
+            <h4>Global Community</h4>
+            <p>Students from 120+ countries</p>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" class="btn btn-navy">Explore Campus →</a>
+    </div>
+
+    <div class="campus-visual">
+      <div class="campus-img tall">
+        <div class="campus-img-fill ci-1">🏛️</div>
+        <span class="campus-img-label">Main Library</span>
+      </div>
+      <div class="campus-img">
+        <div class="campus-img-fill ci-2">🔬</div>
+        <span class="campus-img-label">Research Lab</span>
+      </div>
+      <div class="campus-img">
+        <div class="campus-img-fill ci-3">🌿</div>
+        <span class="campus-img-label">The Quad</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ══════════════════════════════════════════════════ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <p class="section-label">Student Stories</p>
+      <h2 class="section-title">Voices of <em>Aldrich</em></h2>
+    </div>
+
+    <div class="testimonials-grid">
+
+      <div class="testi-card">
+        <span class="testi-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">Aldrich didn't just teach me computer science—it taught me how to think. The research opportunities I had as an undergrad were extraordinary, and the alumni network opened doors I never imagined.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-1">SM</div>
+          <div>
+            <span class="testi-name">Sarah Mitchell</span>
+            <span class="testi-role">CS Graduate, Now at Google DeepMind</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <span class="testi-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">The interdisciplinary approach here is unmatched. I studied economics and environmental science simultaneously, which shaped my career at the UN in ways I'm deeply grateful for every day.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-2">JR</div>
+          <div>
+            <span class="testi-name">James Rodrigo</span>
+            <span class="testi-role">Policy Analyst, United Nations</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <span class="testi-quote">"</span>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">Coming from abroad, I was anxious about fitting in—but Aldrich's global community felt like home within weeks. The professors treat you as a peer, and that changes everything about how you learn.</p>
+        <div class="testi-author">
+          <div class="testi-avatar av-3">AK</div>
+          <div>
+            <span class="testi-name">Amara Konte</span>
+            <span class="testi-role">Medical Research Fellow, Johns Hopkins</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWS ══════════════════════════════════════════════════════════ -->
+<section class="news" id="news">
+  <div class="container">
+    <div class="news-header">
+      <div>
+        <p class="section-label">Latest Updates</p>
+        <h2 class="section-title">News &amp; <em>Research</em></h2>
+      </div>
+      <a href="#" class="btn btn-navy">All Stories →</a>
+    </div>
+
+    <div class="news-grid">
+
+      <!-- Featured article -->
+      <div class="news-card">
+        <div class="news-img ni-1">🧬</div>
+        <div class="news-body">
+          <span class="news-tag">⚗️ Research</span>
+          <h3>Aldrich Scientists Develop Breakthrough CRISPR Technique for Rare Disease Treatment</h3>
+          <p>A team from the Aldrich Institute of Biomedical Research has published findings in <em>Nature Medicine</em> detailing a novel CRISPR-based approach that could treat three rare genetic conditions simultaneously.</p>
+          <div class="news-meta">
+            <span>📅 April 28, 2025</span>
+            <span>⏱ 5 min read</span>
+            <span>🔬 Research</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side articles -->
+      <div class="news-side">
+
+        <div class="news-mini">
+          <div class="news-mini-icon">🏆</div>
+          <div>
+            <h4>Aldrich wins 3 National University Awards at the Higher Education Summit</h4>
+            <span>📅 April 22, 2025</span>
+          </div>
+        </div>
+
+        <div class="news-mini">
+          <div class="news-mini-icon">🤖</div>
+          <div>
+            <h4>New AI Ethics Centre officially opened by Dean Prof. Helen Ashford</h4>
+            <span>📅 April 18, 2025</span>
+          </div>
+        </div>
+
+        <div class="news-mini">
+          <div class="news-mini-icon">🌱</div>
+          <div>
+            <h4>Campus achieves carbon-neutral certification, first in the UK</h4>
+            <span>📅 April 10, 2025</span>
+          </div>
+        </div>
+
+        <div class="news-mini">
+          <div class="news-mini-icon">🎓</div>
+          <div>
+            <h4>Scholarship endowment reaches $500M, expanding access for low-income students</h4>
+            <span>📅 March 30, 2025</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA BANNER ════════════════════════════════════════════════════ -->
+<section class="cta-banner">
+  <div class="container cta-content">
+    <p class="section-label">Begin Your Journey</p>
+    <h2>Ready to Write Your<br>Chapter at Aldrich?</h2>
+    <p>Join a community of scholars, innovators, and changemakers. Applications for the Class of 2029 are now open.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-primary">Apply Now →</a>
+      <a href="#" class="btn btn-outline">Request Prospectus</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <a class="nav-logo" href="#">
+          <div class="nav-logo-emblem">A</div>
+          <div class="nav-logo-text">
+            <strong>Aldrich University</strong>
+            <span>Est. 1872 · Cambridge</span>
+          </div>
+        </a>
+        <p>Dedicated to the advancement of knowledge and the education of scholars who will make a difference in the world.</p>
+        <div class="footer-social">
+          <a class="social-btn" href="#" title="Twitter">𝕏</a>
+          <a class="social-btn" href="#" title="LinkedIn">in</a>
+          <a class="social-btn" href="#" title="Instagram">▶</a>
+          <a class="social-btn" href="#" title="YouTube">▷</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Academics</h4>
+        <ul>
+          <li><a href="#">Undergraduate</a></li>
+          <li><a href="#">Postgraduate</a></li>
+          <li><a href="#">PhD Programs</a></li>
+          <li><a href="#">Online Learning</a></li>
+          <li><a href="#">Continuing Ed</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Campus</h4>
+        <ul>
+          <li><a href="#">Student Life</a></li>
+          <li><a href="#">Housing</a></li>
+          <li><a href="#">Libraries</a></li>
+          <li><a href="#">Sports Centre</a></li>
+          <li><a href="#">Dining</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">admissions@aldrich.ac.uk</a></li>
+          <li><a href="#">+44 1223 000 000</a></li>
+          <li><a href="#">Cambridge, CB2 1TN, UK</a></li>
+          <li><a href="#">Open Campus Map</a></li>
+          <li><a href="#">Press Office</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Aldrich University. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Settings</a>
+        <a href="#">Accessibility</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
