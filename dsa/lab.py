@@ -26,17 +26,17 @@
 # a=list(map(int,input().split()))
 # qs(a,0,len(a)-1)
 # print(a)
-def eval_postfix(exp):
-    s=[]
-    for c in exp:
-        if c.isdigit():
-            s.append(int(c))
-        else:
-            b=s.pop(); a=s.pop()
-            if c=='+': s.append(a+b)
-            elif c=='-': s.append(a-b)
-            elif c=='*': s.append(a*b)
-            elif c=='/': s.append(a/b)
-    return s[0]
+# def eval_postfix(exp):
+#     s=[]
+#     for c in exp:
+#         if c.isdigit():
+#             s.append(int(c))
+#         else:
+#             b=s.pop(); a=s.pop()
+#             if c=='+': s.append(a+b)
+#             elif c=='-': s.append(a-b)
+#             elif c=='*': s.append(a*b)
+#             elif c=='/': s.append(a/b)
+#     return s[0]
 
-print(eval_postfix(input()))
+# print(eval_postfix(input()))
