@@ -29,16 +29,18 @@
 # fig.show()
 
 # print("SciPy Imported Successfully")
-from tkinter import *
+# from tkinter import *
 
-def draw_rectangle(canvas):
-    canvas.create_rectangle(50, 50, 200, 150)
+# def draw_rectangle(canvas):
+#     canvas.create_rectangle(50, 50, 200, 150)
 
-root = Tk()
+# root = Tk()
 
-canvas = Canvas(root, width=300, height=200)
-canvas.pack()
+# canvas = Canvas(root, width=300, height=200)
+# canvas.pack()
 
-draw_rectangle(canvas)
+# draw_rectangle(canvas)
 
-root.mainloop()
+# root.mainloop()
+word = input("Enter a word: ")
+print(",".join(word))
