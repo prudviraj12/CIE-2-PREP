@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flappy Bird</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Press Start 2P', monospace;
+    }
+
+    #gameCanvas {
+      border: 3px solid #543b28;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    #ui {
+      display: flex;
+      justify-content: space-between;
+      width: 360px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #fff;
+    }
+
+    #tip {
+      font-size: 9px;
+      color: #aaa;
+      margin-top: 6px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="gameCanvas" width="360" height="480"></canvas>
+  <div id="ui">
+    <span id="score">Score: 0</span>
+    <span id="best">Best: 0</span>
+  </div>
+  <div id="tip">Click / Space / Tap to flap</div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const bestEl  = document.getElementById('best');
+
+    const W = 360, H = 480;
+
+    /* ── Physics constants ─────────────────────────────────────────── */
+    const GRAVITY    = 0.5;   // pixels/frame² — pulls bird down every frame
+    const FLAP_FORCE = -9;    // upward velocity applied instantly on flap
+    /* ─────────────────────────────────────────────────────────────── */
+
+    const BIRD_X    = 70,  BIRD_R = 14;
+    const PIPE_W    = 52,  PIPE_GAP = 145;
+    const PIPE_SPD  = 2.5, PIPE_INT = 1500;
+    const GROUND    = H - 40;
+
+    let state = 'idle';   // idle | playing | dead
+    let bird, pipes, score, best = 0, lastPipe, rafId, prevT = null;
+
+    /* ── Initialise ──────────────────────────────────────────────── */
+    function mkBird() { return { y: H / 2, vy: 0, angle: 0, wing: 0 }; }
+
+    function reset() {
+      bird  = mkBird();
+      pipes = [];
+      score = 0;
+      lastPipe = 0;
+      scoreEl.textContent = 'Score: 0';
+    }
+
+    /* ── Flap ────────────────────────────────────────────────────── */
+    function flap() {
+      if (state === 'dead') return;
+      if (state === 'idle') {
+        state = 'playing';
+        lastPipe = performance.now();
+        prevT = null;
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
+      // Apply upward impulse — gravity continues acting from next frame
+      bird.vy   = FLAP_FORCE;
+      bird.wing = 1;
+    }
+
+    /* ── Pipe factory ────────────────────────────────────────────── */
+    function addPipe() {
+      const topH = 60 + Math.random() * (GROUND - 60 - PIPE_GAP);
+      pipes.push({ x: W + PIPE_W, topH, scored: false });
+    }
+
+    /* ── Collision ───────────────────────────────────────────────── */
+    function hitTest() {
+      const r = BIRD_R - 3;
+      if (bird.y + r >= GROUND || bird.y - r <= 0) return true;
+      for (const p of pipes) {
+        if (BIRD_X + r > p.x && BIRD_X - r < p.x + PIPE_W) {
+          if (bird.y - r < p.topH || bird.y + r > p.topH + PIPE_GAP) return true;
+        }
+      }
+      return false;
+    }
+
+    /* ── Draw helpers ────────────────────────────────────────────── */
+    function drawBG() {
+      // Sky gradient
+      const g = ctx.createLinearGradient(0, 0, 0, GROUND);
+      g.addColorStop(0, '#5bc8e8');
+      g.addColorStop(1, '#a8e6f0');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+
+      // Clouds
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      [[55, 70, 38], [195, 55, 28], [295, 95, 22]].forEach(([x, y, r]) => {
+        ctx.beginPath();
+        ctx.arc(x,         y,           r,       0, Math.PI * 2);
+        ctx.arc(x + r*.9,  y - r*.3,    r * .65, 0, Math.PI * 2);
+        ctx.arc(x - r*.8,  y - r*.2,    r * .55, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Ground
+      ctx.fillStyle = '#ded895'; ctx.fillRect(0, GROUND,     W, H - GROUND);
+      ctx.fillStyle = '#5ba33b'; ctx.fillRect(0, GROUND - 6, W, 8);
+    }
+
+    function drawPipe(p) {
+      const capW = PIPE_W + 10, capX = p.x - (capW - PIPE_W) / 2, capH = 24;
+
+      function body(x, y, w, h) {
+        ctx.fillStyle = '#4caf27'; ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = '#3d9020'; ctx.fillRect(x + w - 10, y, 10, h);
+        ctx.fillStyle = '#5edd32'; ctx.fillRect(x + 2, y, 5, h);
+      }
+      function cap(x, y, w, h) {
+        ctx.fillStyle = '#4caf27'; ctx.fillRect(x, y, w, h);
+        ctx.fillStyle = '#3d9020'; ctx.fillRect(x + w - 12, y, 12, h);
+        ctx.fillStyle = '#5edd32'; ctx.fillRect(x + 2, y, 7, h);
+      }
+
+      // Top pipe
+      body(p.x, 0,             PIPE_W, p.topH - capH);
+      cap(capX,  p.topH - capH, capW,   capH);
+
+      // Bottom pipe
+      const botY = p.topH + PIPE_GAP;
+      cap(capX,  botY,        capW,   capH);
+      body(p.x,  botY + capH, PIPE_W, H - botY - capH);
+    }
+
+    function drawBird() {
+      ctx.save();
+      ctx.translate(BIRD_X, bird.y);
+      const ang = Math.max(-Math.PI / 4, Math.min(Math.PI / 3, bird.angle));
+      ctx.rotate(ang);
+
+      // Body
+      ctx.fillStyle = '#f5d33a';
+      ctx.beginPath(); ctx.ellipse(0, 0, BIRD_R, BIRD_R - 2, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Belly
+      ctx.fillStyle = '#e8b800';
+      ctx.beginPath(); ctx.ellipse(2, 3, BIRD_R - 4, BIRD_R - 6, .2, 0, Math.PI * 2); ctx.fill();
+
+      // Wing — flaps up or down based on state
+      const wy = bird.wing > 0.5 ? -5 : 5;
+      ctx.fillStyle = '#f0c800';
+      ctx.beginPath(); ctx.ellipse(-3, wy, 8, 5, -.4, 0, Math.PI * 2); ctx.fill();
+
+      // Eye white
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(5, -4, 5, 0, Math.PI * 2); ctx.fill();
+      // Pupil
+      ctx.fillStyle = '#222';
+      ctx.beginPath(); ctx.arc(6.5, -4, 2.5, 0, Math.PI * 2); ctx.fill();
+      // Highlight
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(7.2, -4.8, 1, 0, Math.PI * 2); ctx.fill();
+
+      // Beak
+      ctx.fillStyle = '#ff8c00';
+      ctx.beginPath(); ctx.moveTo(12, -1); ctx.lineTo(20, 1); ctx.lineTo(12, 4); ctx.closePath(); ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawScore() {
+      ctx.font = '22px "Press Start 2P",monospace';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#543b28'; ctx.lineWidth = 3;
+      ctx.strokeText(score, W / 2, 52);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(score, W / 2, 52);
+    }
+
+    function drawOverlay(title, sub) {
+      ctx.fillStyle = 'rgba(0,0,0,0.38)'; ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#543b28'; ctx.lineWidth = 3;
+
+      ctx.font = '18px "Press Start 2P",monospace';
+      ctx.strokeText(title, W / 2, H / 2 - 14);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(title,   W / 2, H / 2 - 14);
+
+      ctx.font = '9px "Press Start 2P",monospace';
+      ctx.strokeText(sub, W / 2, H / 2 + 14);
+      ctx.fillText(sub,   W / 2, H / 2 + 14);
+    }
+
+    function render() {
+      drawBG();
+      pipes.forEach(drawPipe);
+      drawBird();
+      if (state !== 'idle') drawScore();
+      if (state === 'idle') drawOverlay('FLAPPY BIRD', 'click or space to start');
+      if (state === 'dead') drawOverlay('GAME OVER',   'click or space to retry');
+    }
+
+    /* ── Main loop ───────────────────────────────────────────────── */
+    function loop(now) {
+      if (state !== 'playing') return;
+      if (!prevT) prevT = now;
+      const dt = Math.min((now - prevT) / 16.67, 3);
+      prevT = now;
+
+      /* ── GRAVITY PHYSICS ────────────────────────────────────────
+         Step 1: Add gravity to vertical velocity each frame.
+                 This makes the bird accelerate downward naturally.
+         Step 2: Add velocity to position.
+                 When the player flaps, vy is set to FLAP_FORCE (negative = up),
+                 then gravity pulls it back down each subsequent frame.
+      ─────────────────────────────────────────────────────────── */
+      bird.vy   += GRAVITY * dt;    // velocity increases downward every frame
+      bird.y    += bird.vy * dt;    // position follows velocity
+      bird.angle = bird.vy * 0.055; // tilt nose up/down with velocity
+      bird.wing  = Math.max(0, bird.wing - 0.09 * dt);
+
+      // Spawn pipes on interval
+      if (now - lastPipe > PIPE_INT) { addPipe(); lastPipe = now; }
+
+      // Move pipes & score
+      pipes.forEach(p => {
+        p.x -= PIPE_SPD * dt;
+        if (!p.scored && p.x + PIPE_W < BIRD_X) {
+          p.scored = true;
+          score++;
+          scoreEl.textContent = 'Score: ' + score;
+          if (score > best) { best = score; bestEl.textContent = 'Best: ' + best; }
+        }
+      });
+      pipes = pipes.filter(p => p.x > -PIPE_W - 20);
+
+      // Check collision
+      if (hitTest()) {
+        state = 'dead'; prevT = null; render();
+        setTimeout(() => {
+          canvas.addEventListener('click',    onRestart);
+          document.addEventListener('keydown', onRestartKey);
+        }, 600);
+        return;
+      }
+
+      render();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    /* ── Restart ─────────────────────────────────────────────────── */
+    function onRestart() {
+      canvas.removeEventListener('click',    onRestart);
+      document.removeEventListener('keydown', onRestartKey);
+      doRestart();
+    }
+    function onRestartKey(e) { if (e.code === 'Space') { e.preventDefault(); onRestart(); } }
+    function doRestart() {
+      cancelAnimationFrame(rafId);
+      prevT = null;
+      reset();
+      state    = 'playing';
+      lastPipe = performance.now();
+      rafId    = requestAnimationFrame(loop);
+    }
+
+    /* ── Input ───────────────────────────────────────────────────── */
+    canvas.addEventListener('click', () => {
+      if (state === 'idle' || state === 'playing') flap();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' && (state === 'idle' || state === 'playing')) {
+        e.preventDefault(); flap();
+      }
+    });
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      if (state === 'idle' || state === 'playing') flap();
+    }, { passive: false });
+
+    // Start
+    reset();
+    render();
+  </script>
+</body>
+</html>
